@@ -27,6 +27,20 @@
 - Invoke skills with natural language
 - Each skill is one independent capability
 
+## Module-specific skills
+
+This is a multi-module Maven project. Each submodule may define its own
+skills under `<module>/.claude/skills/`. When working on code inside a
+specific module (e.g. running `mvn` commands, editing that module's classes,
+or fixing its tests), check for and prefer skills scoped to that module
+over root-level skills.
+
+- `module-a/.claude/skills/` — build/test conventions specific to module-a
+- `module-b/.claude/skills/` — build/test conventions specific to module-b
+
+Use `mvn -pl <module> -am ...` when a task is scoped to a single module,
+per that module's skill if one exists.
+
 ### 6. Subagents usage
 - Load subagents from `.claude/agents/`
 - Don't use subagents

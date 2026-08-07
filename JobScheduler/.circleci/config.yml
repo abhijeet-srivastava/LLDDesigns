@@ -1,0 +1,26 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: cimg/openjdk:21.0
+    working_directory: ~/project
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - maven-deps-{{ checksum "pom.xml" }}-{{ checksum "JobScheduler/pom.xml" }}
+      - run:
+          name: Run JobScheduler tests
+          command: mvn -pl JobScheduler -am test -B
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-deps-{{ checksum "pom.xml" }}-{{ checksum "JobScheduler/pom.xml" }}
+      - store_test_results:
+          path: JobScheduler/target/surefire-reports
+
+workflows:
+  build-and-test:
+    jobs:
+      - test

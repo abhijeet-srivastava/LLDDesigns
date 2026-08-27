@@ -14,6 +14,7 @@
         <module>GridPathfinding</module>
         <module>ConnectionPoolWithWaitingQueue</module>
         <module>CustomEvictionPolicyCache</module>
+        <module>LLCoding</module>
     </modules>
 
     <properties>

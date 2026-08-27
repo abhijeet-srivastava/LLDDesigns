@@ -15,6 +15,7 @@
         <module>ConnectionPoolWithWaitingQueue</module>
         <module>CustomEvictionPolicyCache</module>
         <module>LLCoding</module>
+        <module>RetryLibrary</module>
     </modules>
 
     <properties>

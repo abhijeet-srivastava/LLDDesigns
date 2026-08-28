@@ -89,4 +89,58 @@ public class Main {
         }
         return -1;
     }
+
+    int maximumCircleScore(List<Integer> tileScores) {
+        int t1 = 0;
+        int t2 = 0;
+        int max = 0;
+        for(int score:tileScores) {
+            int tmp = t1+score;
+            t1 = t2;
+            t2 = Math.max(t2, tmp);
+            max = Math.max(t1, t2);
+        }
+        return max;
+    }
+
+    int minimumSteps(List<String> grid, int k, int sourceRow, int sourceColumn, int destinationRow, int destinationColumn) {
+        int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1, 0}};
+        int m = grid.size(), n = grid.get(0).length();
+        int[][] DP = new int[m][n];
+        for(int[] row: DP) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+        DP[sourceRow][sourceColumn] = 0;
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{sourceRow, sourceColumn, 0});
+        int steps = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            while(size-- > 0) {
+                int[] curr = queue.remove();
+                int row = curr[0], col = curr[1], dist = curr[2];
+                if(row == destinationRow && col == destinationColumn) {
+                    return dist;
+                }
+                for(int[] dir: dirs) {
+                    int dx = dir[0], dy = dir[1], count = 0;
+                    int r = row + dx, c = col + dy;
+                    while(r >= 0 && r < m
+                            && c >= 0 && c < n && count < k
+                            && grid.get(r).charAt(c) != '#') {
+                        if(DP[r][c] > dist+1) {
+                            DP[r][c] = dist + 1;
+                            queue.offer(new int[]{r, c, dist+1});
+                        }
+                        count += 1;
+                        r += dx;
+                        c += dy;
+                    }
+                }
+
+            }
+            steps += 1;
+        }
+        return -1;
+    }
 }

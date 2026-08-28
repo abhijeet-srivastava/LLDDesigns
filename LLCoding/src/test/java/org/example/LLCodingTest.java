@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -94,6 +95,107 @@ class LLCodingTest {
         org.assertj.core.api.Assertions.assertThatThrownBy(() ->
                         llcoding.firstTimedOutJobId(List.of("1,5,END"), 5))
                 .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("maximumLineScore: END with no matching START currently throws NPE (undefined input)")
+    void testMaximumLineScore() {
+        assertThat(llcoding.maximumCircleScore(List.of(5, 11, 4, 9, 2) ))
+                .isEqualTo(20);
+        assertThat(llcoding.maximumCircleScore(List.of(12, 3, 6, 10) ))
+                .isEqualTo(22);
+        assertThat(llcoding.maximumCircleScore(List.of(9, 2, 7, 4) ))
+                .isEqualTo(16);
+
+        assertThat(llcoding.maximumCircleScore(List.of(5, 12, 6, 11, 4) ))
+                .isEqualTo(23);
+        assertThat(llcoding.maximumCircleScore(List.of(5, 5, 10, 100, 10, 5) )).isEqualTo(110);
+        assertThat(llcoding.maximumCircleScore(List.of(3, 2, 7, 10) )).isEqualTo(13);
+        assertThat(llcoding.maximumCircleScore(List.of(9, 1, 6, 10) )).isEqualTo(19);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: END with no matching START currently throws NPE (undefined input)")
+    void testMinimumSteps() {
+        assertThat(llcoding.minimumSteps(List.of("....", ".##.", "...."), 2, 0, 0, 2, 2))
+                .isEqualTo(2);
+        assertThat(llcoding.minimumSteps(List.of(".#.", "###", ".#."), 2, 0, 0, 2, 2))
+                .isEqualTo(-1);
+        assertThat(llcoding.minimumSteps(List.of("..", ".."), 1, 1, 1, 1, 1))
+                .isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: single-cell grid, source == destination")
+    void testMinimumSteps_singleCellGrid() {
+        assertThat(llcoding.minimumSteps(List.of("."), 5, 0, 0, 0, 0))
+                .isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: k=0 allows zero movement, so any distinct destination is unreachable")
+    void testMinimumSteps_zeroKBlocksMovement() {
+        assertThat(llcoding.minimumSteps(List.of("..", ".."), 0, 0, 0, 1, 1))
+                .isEqualTo(-1);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: k=0 with source == destination still returns 0 without needing to move")
+    void testMinimumSteps_zeroKSameSourceAndDestination() {
+        assertThat(llcoding.minimumSteps(List.of("..", ".."), 0, 1, 1, 1, 1))
+                .isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: distance exactly k is reachable in one hop; k+1 needs a second hop")
+    void testMinimumSteps_exactKBoundary() {
+        List<String> row = List.of(".......");
+        assertThat(llcoding.minimumSteps(row, 3, 0, 0, 0, 3))
+                .isEqualTo(1);
+        assertThat(llcoding.minimumSteps(row, 3, 0, 0, 0, 4))
+                .isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: obstacle forces a detour, minimum path follows the only open corridor")
+    void testMinimumSteps_detourAroundObstacle() {
+        List<String> grid = List.of(
+                "..#..",
+                "..#..",
+                "....."
+        );
+        // Column 2 is blocked on rows 0-1; only row 2 is open, so the path must go
+        // down 2, across 4, up 2 = 8 single-cell hops (k=1).
+        assertThat(llcoding.minimumSteps(grid, 1, 0, 0, 0, 4))
+                .isEqualTo(8);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: 100x100 open grid, corner to corner, with k large enough to cross each axis in one hop")
+    void testMinimumSteps_largeOpenGridLargeK() {
+        List<String> grid = buildOpenGrid(100);
+        assertThat(llcoding.minimumSteps(grid, 100, 0, 0, 99, 99))
+                .isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: 100x100 open grid, corner to corner, with k=1 behaves like plain grid BFS")
+    void testMinimumSteps_largeOpenGridUnitK() {
+        List<String> grid = buildOpenGrid(100);
+        assertThat(llcoding.minimumSteps(grid, 1, 0, 0, 99, 99))
+                .isEqualTo(198);
+    }
+
+    @Test
+    @DisplayName("minimumSteps: 100x100 open grid, corner to corner, with a moderate k")
+    void testMinimumSteps_largeOpenGridModerateK() {
+        List<String> grid = buildOpenGrid(100);
+        assertThat(llcoding.minimumSteps(grid, 10, 0, 0, 99, 99))
+                .isEqualTo(20);
+    }
+
+    private List<String> buildOpenGrid(int size) {
+        return Collections.nCopies(size, ".".repeat(size));
     }
 
 }

@@ -194,6 +194,16 @@ class LLCodingTest {
                 .isEqualTo(20);
     }
 
+    @Test
+    @DisplayName("getLongestPathLength")
+    void testGetLongestPathLength() {
+        assertThat(llcoding.getLongestPathLength(List.of("8,8,3", "5,5,7", "2,1,0"))).isEqualTo(5);
+        assertThat(llcoding.getLongestPathLength(List.of("4,5,6", "4,3,7", "3,3,2"))).isEqualTo(4);
+        assertThat(llcoding.getLongestPathLength(List.of("2"))).isEqualTo(1);
+        assertThat(llcoding.getLongestPathLength(List.of("2,3", "4,5"))).isEqualTo(3);
+        assertThat(llcoding.getLongestPathLength(List.of("2,3", "5,4", "6, 7", "8,9"))).isEqualTo(7);
+    }
+
     private List<String> buildOpenGrid(int size) {
         return Collections.nCopies(size, ".".repeat(size));
     }

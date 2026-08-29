@@ -13,6 +13,7 @@ import java.util.Set;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    private static final int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1, 0}};
     public static void main(String[] args) {
         Main llcoding = new Main();
     }
@@ -104,7 +105,7 @@ public class Main {
     }
 
     int minimumSteps(List<String> grid, int k, int sourceRow, int sourceColumn, int destinationRow, int destinationColumn) {
-        int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1, 0}};
+
         int m = grid.size(), n = grid.get(0).length();
         int[][] DP = new int[m][n];
         for(int[] row: DP) {
@@ -142,5 +143,47 @@ public class Main {
             steps += 1;
         }
         return -1;
+    }
+
+    int getLongestPathLength(List<String> gridLines) {
+        int m = gridLines.size(), n = gridLines.get(0).split(",").length;
+        int[][] grid = new int[m][n];
+        for(int i = 0; i < m; i++) {
+            String[] arr = gridLines.get(i).split(",");
+            for(int j = 0; j < n; j++) {
+                grid[i][j] = Integer.parseInt(arr[j].trim());
+            }
+        }
+
+        int[][] maxLen = new int[m][n];
+        for(int[] row: maxLen) {
+            Arrays.fill(row, 1);
+        }
+        int res = 1;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(maxLen[i][j] == 1) {
+                    maxLen[i][j] = dfs(i, j, grid, maxLen);
+                    res = Math.max(res, maxLen[i][j]);
+                }
+            }
+        }
+        return res;
+    }
+
+    private int dfs(int i, int j, int[][] grid, int[][] maxLen) {
+        int m = grid.length, n = grid[0].length;
+        if(maxLen[i][j] > 1) {
+            return maxLen[i][j];
+        }
+        int pathLen = 1;
+        for(int[] dir: dirs) {
+            int r = i + dir[0], c = j + dir[1];
+            if(r < 0 || r >= m || c < 0 || c >= n || grid[i][j] <= grid[r][c]) {
+                continue;
+            }
+            pathLen = Math.max(pathLen, 1 + dfs(r,c, grid, maxLen));
+        }
+        return maxLen[i][j] = pathLen;
     }
 }

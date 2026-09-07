@@ -16,6 +16,7 @@
         <module>CustomEvictionPolicyCache</module>
         <module>LLCoding</module>
         <module>RetryLibrary</module>
+        <module>RangeQueriesWithUpdates</module>
     </modules>
 
     <properties>

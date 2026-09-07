@@ -1,5 +1,9 @@
 package org.example;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -13,7 +17,29 @@ public class Main {
             // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
             System.out.println("i = " + i);
         }
+    }
 
+    public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
+        long mod = 1_000_000_007L;
+        int len = speed.length;
+        int[][] engineers = new int[len][2];
+        for(int i = 0; i < len; i++) {
+            engineers[i] = new int[]{speed[i], efficiency[i]};
+        }
+        Arrays.sort(engineers, Comparator.<int[]>comparingInt(e -> e[1]).reversed());
+        PriorityQueue<int[]> pq = new PriorityQueue(Comparator.<int[]>comparingInt(e -> e[0]));
+        long sum = 0;
+        long res = 0;
+        for(int[] engineer: engineers) {
+            sum += engineer[0];
+            pq.offer(engineer);
+            if(pq.size() > k) {
+                int[] rem = pq.remove();
+                sum -= rem[0];
+            }
+            res = Math.max(res, sum*engineer[1]);
+        }
+        return (int)(res%mod);
     }
 
     public String shortestCommonSupersequence(String str1, String str2) {

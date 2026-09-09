@@ -2,7 +2,7 @@ package org.example;
 
 public class Main {
     public static void main(String[] args) {
-        Cache cache = new TransactionalCache();
+        TransactionalCache cache = new TransactionalCache();
 
         cache.put("name", "Abhijeet");
         System.out.println("name = " + cache.get("name"));

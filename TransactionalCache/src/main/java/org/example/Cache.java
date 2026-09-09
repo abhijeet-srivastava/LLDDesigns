@@ -6,10 +6,4 @@ public interface Cache {
     void put(String key, Object value);
 
     void delete(String key);
-
-    int transaction();
-
-    void commit();
-
-    void rollback();
 }

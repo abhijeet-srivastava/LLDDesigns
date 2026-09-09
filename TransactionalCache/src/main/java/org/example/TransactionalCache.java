@@ -5,7 +5,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TransactionalCache implements Cache {
+public class TransactionalCache implements Cache, Transactional {
 
     private static final Object TOMBSTONE = new Object();
 

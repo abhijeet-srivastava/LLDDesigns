@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("TransactionalCache")
 class TransactionalCacheTest {
 
-    private Cache cache;
+    private TransactionalCache cache;
 
     @BeforeEach
     void setUp() {
